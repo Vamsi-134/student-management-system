@@ -280,6 +280,6 @@ public class StudentController {
 
         model.addAttribute("students", list);
 
-        return "searchStudents";
+        return "viewStudents";
     }
 }
