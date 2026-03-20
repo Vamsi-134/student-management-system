@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.ui.Model;
 
 
 import javax.sql.DataSource;
@@ -202,6 +202,6 @@ public class StudentController {
 
         model.addAttribute("student", s);
 
-        return "editStudent";
+        return "updateStudent";
     }
 }
