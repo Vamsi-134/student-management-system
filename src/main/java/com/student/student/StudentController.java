@@ -229,4 +229,23 @@ public class StudentController {
 
         return "redirect:/manageStudents";
     }
+    @GetMapping("/deleteStudent")
+    public String deleteStudent(@RequestParam int id) {
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            String sql = "DELETE FROM student WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, id);
+
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/manageStudents";
+    }
 }
