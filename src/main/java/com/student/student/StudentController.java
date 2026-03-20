@@ -142,4 +142,36 @@ public class StudentController {
 
         return "ranking"; // HTML file name
     }
+    @GetMapping("/manageStudents")
+    public String manageStudents(org.springframework.ui.Model model) {
+
+        List<Student> list = new ArrayList<>();
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            String sql = "SELECT * FROM student";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
+
+                list.add(s);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("students", list);
+
+        return "manageStudents"; // HTML file name
+    }
 }
