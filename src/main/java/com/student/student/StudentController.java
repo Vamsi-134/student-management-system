@@ -174,4 +174,34 @@ public class StudentController {
 
         return "manageStudents"; // HTML file name
     }
+    @GetMapping("/editStudent")
+    public String editStudent(@RequestParam int id, Model model) {
+
+        Student s = new Student();
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            String sql = "SELECT * FROM student WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("student", s);
+
+        return "editStudent";
+    }
 }
