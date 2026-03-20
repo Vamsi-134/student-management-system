@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Manage Students</title>
+
+<link href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap' rel='stylesheet'>
+
+<style>
+body{font-family:Poppins;background:#0b0f1a;color:white;padding:30px;}
+
+/* NAVBAR */
+.nav{display:flex;justify-content:space-between;align-items:center;padding:15px 25px;background:#1c1f2b;border-radius:12px;margin-bottom:30px;}
+.logo{font-size:20px;font-weight:600;color:#6c63ff;}
+.logout{background:#ff4d4d;padding:8px 16px;border-radius:8px;color:white;text-decoration:none;}
+
+/* TABLE CARD */
+.table-card{background:#1c1f2b;border-radius:16px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.4);}  
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;}
+th,td{padding:14px;text-align:center;}
+th{background:#2b2f3d;}
+tr{border-bottom:1px solid #2f3345;transition:0.3s;}
+tr:hover{background:#252a3d;}
+
+/* BUTTONS */
+.btn{padding:6px 14px;border-radius:8px;text-decoration:none;color:white;font-size:13px;transition:0.3s;}
+
+.update{background:linear-gradient(45deg,#00c853,#69f0ae);}  
+.update:hover{transform:scale(1.1);}  
+
+.delete{background:linear-gradient(45deg,#ff1744,#ff616f);}  
+.delete:hover{transform:scale(1.1);}  
+
+/* BACK */
+.back{display:inline-block;margin-top:20px;padding:10px 18px;background:#5b5bff;border-radius:8px;color:white;text-decoration:none;}
+.back:hover{background:#7373ff;}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+<div class="logo">SV College</div>
+<a class="logout" href="/">Logout</a>
+</div>
+
+<h2 style="margin-bottom:20px;">Manage Students</h2>
+
+<div class="table-card">
+
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Marks</th>
+<th>Action</th>
+</tr>
+
+<!-- 🔥 MAIN CHANGE -->
+<tr th:each="s : ${students}">
+<td th:text="${s.id}"></td>
+<td th:text="${s.name}"></td>
+<td th:text="${s.marks}"></td>
+
+<td>
+<a class="btn update"
+   th:href="@{'/editStudent?id=' + ${s.id}}">
+Update
+</a>
+
+<a class="btn delete"
+   th:href="@{'/deleteStudent?id=' + ${s.id}}"
+   onclick="return confirm('Delete this student?');">
+Delete
+</a>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+<a class="back" href="/dashboard">← Back to Dashboard</a>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Ranking</title>
+
+<link href='https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@400;600;700&display=swap' rel='stylesheet'>
+
+<style>
+body{font-family:Poppins;background:#0f1117;color:white;padding:40px;}
+
+h2{text-align:center;margin-bottom:30px;font-weight:700;font-size:28px;letter-spacing:1px;}
+
+/* TOP CARDS */
+.top-cards{
+display:flex;
+justify-content:center;
+align-items:flex-end;
+gap:50px;
+margin-bottom:40px;
+}
+
+/* CARD */
+.card{
+padding:25px 30px;
+border-radius:18px;
+text-align:center;
+transition:0.4s;
+position:relative;
+overflow:hidden;
+
+opacity:0;
+transform:translateY(30px) scale(0.8);
+animation:popIn .6s ease forwards;
+}
+
+/* ANIMATION DELAY */
+.top-cards .card:nth-child(1){animation-delay:0.2s;}
+.top-cards .card:nth-child(2){animation-delay:0.4s;}
+.top-cards .card:nth-child(3){animation-delay:0.6s;}
+
+/* POP ANIMATION */
+@keyframes popIn{
+0%{
+opacity:0;
+transform:translateY(30px) scale(0.7);
+}
+100%{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+}
+
+/* TEXT */
+.card h3{font-family:Orbitron;margin-bottom:12px;font-size:16px;letter-spacing:2px;color:#444;}
+.card .name{font-family:Orbitron;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.card .marks{font-family:Orbitron;opacity:0.9;margin-top:5px;}
+
+/* ===== RANK 1 ===== */
+.first{
+width:280px;
+transform:translateY(-35px);
+background:linear-gradient(135deg,#3b2f00,#ffd700,#3b2f00);
+color:black;
+box-shadow:0 20px 60px rgba(255,215,0,0.6);
+}
+
+.first h3{font-size:18px;color:#222;}
+.first .name{font-size:28px;}
+.first .marks{font-size:20px;font-weight:600;}
+
+.first:hover{
+transform:translateY(-40px) scale(1.07);
+}
+
+
+/* ===== RANK 2 ===== */
+.second{
+width:250px;
+background:linear-gradient(135deg,#2c2c2c,#c0c0c0,#2c2c2c);
+box-shadow:0 10px 30px rgba(192,192,192,0.3);
+}
+
+.second h3{font-size:14px;color:#333;}
+.second .name{font-size:20px;}
+.second .marks{font-size:15px;}
+
+.second:hover{
+transform:translateY(-12px) scale(1.04);
+}
+
+
+/* ===== RANK 3 ===== */
+.third{
+width:250px;
+background:linear-gradient(135deg,#3a1f0f,#cd7f32,#3a1f0f);
+box-shadow:0 10px 30px rgba(205,127,50,0.3);
+}
+
+.third h3{font-size:14px;color:#fff;}
+.third .name{font-size:20px;}
+.third .marks{font-size:15px;}
+
+.third:hover{
+transform:translateY(-12px) scale(1.04);
+}
+
+
+/* ===== ANIMATION ===== */
+.card{
+opacity:0;
+transform:translateY(30px);
+animation:popIn .6s ease forwards;
+}
+
+.top-cards .card:nth-child(1){animation-delay:0.2s;}
+.top-cards .card:nth-child(2){animation-delay:0.4s;}
+.top-cards .card:nth-child(3){animation-delay:0.6s;}
+
+@keyframes popIn{
+0%{
+opacity:0;
+transform:translateY(30px) scale(0.9);
+}
+100%{
+opacity:1;
+transform:translateY(0) scale(1);
+}
+}
+
+/* HOVER */
+.card:hover{
+transform:scale(1.1);
+}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;background:#1c1f2b;border-radius:10px;overflow:hidden;}
+th,td{padding:14px;text-align:center;}
+th{background:#2b2f3d;font-weight:600;}
+tr:hover{background:#2a2e3d;}
+
+/* BACK */
+.back{display:block;margin-top:20px;text-align:center;color:#9aa0a6;text-decoration:none;}
+.back:hover{color:white;}
+</style>
+
+</head>
+
+<body>
+
+<h2>Student Ranking</h2>
+
+<div class="top-cards">
+
+<!-- RANK 2 -->
+<div class="card second" th:if="${students.size() > 1}">
+<h3>RANK 2</h3>
+<p class="name" th:text="${students[1].name}"></p>
+<p class="marks" th:text="${students[1].marks}"></p>
+</div>
+
+<!-- RANK 1 -->
+<div class="card first" th:if="${students.size() > 0}">
+<h3>RANK 1</h3>
+<p class="name" th:text="${students[0].name}"></p>
+<p class="marks" th:text="${students[0].marks}"></p>
+</div>
+
+<!-- RANK 3 -->
+<div class="card third" th:if="${students.size() > 2}">
+<h3>RANK 3</h3>
+<p class="name" th:text="${students[2].name}"></p>
+<p class="marks" th:text="${students[2].marks}"></p>
+</div>
+
+</div>
+
+<table>
+<tr><th>Rank</th><th>Name</th><th>Marks</th></tr>
+
+<tr th:each="s, stat : ${students}">
+<td th:text="${stat.count}"></td>
+<td th:text="${s.name}"></td>
+<td th:text="${s.marks}"></td>
+</tr>
+
+</table>
+
+<a class="back" href="/dashboard">← Back to Dashboard</a>
+
+</body>
+</html>

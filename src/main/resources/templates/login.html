@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Admin Login - SV College</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- 🔥 ALL YOUR CSS SAME (NO CHANGE) -->
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins', sans-serif;
+}
+
+:root{
+  --bg1:#0b1f3a;
+  --bg2:#1b3a5b;
+  --bg3:#274c77;
+
+  --btn1:#4a5d73;
+  --btn2:#1f2f3f;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:24px;
+  background:#050814;
+  overflow:hidden;
+  position:relative;
+}
+
+/* ===== SPECIAL BUBBLE FLOW BACKGROUND ===== */
+.pro-bg{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(88,110,230,.22), transparent 34%),
+    radial-gradient(circle at 86% 80%, rgba(152,110,245,.18), transparent 36%),
+    linear-gradient(150deg, #040611 0%, #090f28 36%, #14194a 72%, #090f2a 100%);
+  animation:bgPulse 12s ease-in-out infinite alternate;
+}
+
+.pro-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.08) 0.7px, transparent 0.7px);
+  background-size:4px 4px;
+  opacity:.06;
+}
+
+.pro-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center, transparent 42%, rgba(0,0,0,.45) 100%);
+}
+
+/* smooth liquid waves */
+.flow-wave{
+  position:absolute;
+  width:180%;
+  left:-40%;
+  border-radius:50%;
+  filter:blur(8px);
+}
+.wave-a{
+  height:260px;
+  top:16%;
+  background:radial-gradient(ellipse at center, rgba(152,168,255,.15) 0%, rgba(152,168,255,0) 72%);
+  animation:waveFloatA 18s ease-in-out infinite;
+}
+.wave-b{
+  height:240px;
+  top:44%;
+  background:radial-gradient(ellipse at center, rgba(170,146,255,.14) 0%, rgba(170,146,255,0) 74%);
+  animation:waveFloatB 22s ease-in-out infinite;
+}
+.wave-c{
+  height:230px;
+  bottom:-6%;
+  background:radial-gradient(ellipse at center, rgba(120,165,255,.12) 0%, rgba(120,165,255,0) 76%);
+  animation:waveFloatC 20s ease-in-out infinite;
+}
+
+/* elegant light streams */
+.glow-stream{
+  position:absolute;
+  width:160%;
+  height:2px;
+  left:-30%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent);
+  opacity:.45;
+  filter:blur(.2px);
+}
+.stream-1{ top:24%; animation:streamMove 8s linear infinite; }
+.stream-2{ top:52%; animation:streamMove 10s linear infinite reverse; opacity:.35; }
+.stream-3{ top:78%; animation:streamMove 12s linear infinite; opacity:.28; }
+
+/* bubble flow */
+.bubble-field span{
+  position:absolute;
+  bottom:-140px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.72), rgba(170,190,255,.18) 55%, rgba(170,190,255,.08) 100%);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 0 16px rgba(145,170,255,.22), inset 0 0 8px rgba(255,255,255,.2);
+  animation:bubbleRise var(--dur) linear infinite;
+  animation-delay:var(--delay);
+  opacity:.78;
+}
+
+/* each bubble */
+.b1{left:4%;  width:18px;height:18px; --dur:11s; --delay:0s;   --drift:20px;}
+.b2{left:10%; width:26px;height:26px; --dur:14s; --delay:1.2s; --drift:-18px;}
+.b3{left:17%; width:14px;height:14px; --dur:9s;  --delay:2.4s; --drift:14px;}
+.b4{left:24%; width:30px;height:30px; --dur:16s; --delay:.8s;  --drift:-26px;}
+.b5{left:32%; width:20px;height:20px; --dur:12s; --delay:3.2s; --drift:18px;}
+.b6{left:39%; width:12px;height:12px; --dur:8s;  --delay:1.7s; --drift:-10px;}
+.b7{left:47%; width:28px;height:28px; --dur:15s; --delay:2.8s; --drift:24px;}
+.b8{left:55%; width:16px;height:16px; --dur:10s; --delay:0.6s; --drift:-16px;}
+.b9{left:63%; width:24px;height:24px; --dur:13s; --delay:2.1s; --drift:20px;}
+.b10{left:71%; width:14px;height:14px; --dur:9.5s; --delay:1.1s; --drift:-12px;}
+.b11{left:79%; width:32px;height:32px; --dur:17s; --delay:3.6s; --drift:28px;}
+.b12{left:86%; width:18px;height:18px; --dur:11.5s; --delay:.4s; --drift:-14px;}
+.b13{left:92%; width:22px;height:22px; --dur:13.5s; --delay:2.7s; --drift:16px;}
+.b14{left:97%; width:12px;height:12px; --dur:8.5s; --delay:1.5s; --drift:-8px;}
+
+/* Main frame */
+.auth-shell{
+  position:relative;
+  z-index:10;
+  width:min(1080px, 100%);
+  min-height:620px;
+  border-radius:28px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  background:rgba(12,16,38,.62);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(167,184,255,.22);
+  box-shadow:0 30px 90px rgba(0,0,0,.62);
+}
+
+/* LEFT SIDE */
+.left-panel{
+  position:relative;
+  padding:60px 52px;
+  color:#fff;
+  background:linear-gradient(140deg, var(--bg1), var(--bg2), var(--bg3));
+  background-size:220% 220%;
+  animation:panelFlow 8s ease infinite;
+  overflow:hidden;
+}
+
+.left-panel::before{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.18), transparent 66%);
+  top:-130px;
+  left:-85px;
+  filter:blur(6px);
+  animation:blobMove 8s ease-in-out infinite alternate;
+}
+
+.left-panel::after{
+  content:"";
+  position:absolute;
+  width:380px;
+  height:380px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(168,210,255,.26), transparent 72%);
+  right:-125px;
+  bottom:-120px;
+  animation:blobMove 8s ease-in-out infinite alternate-reverse;
+}
+
+.brand{
+  position:relative;
+  z-index:2;
+  display:inline-block;
+  font-size:14px;
+  font-weight:600;
+  letter-spacing:.6px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.28);
+  margin-bottom:26px;
+}
+
+.main-title{
+  position:relative;
+  z-index:2;
+  font-size:42px;
+  line-height:1.15;
+  font-weight:800;
+  max-width:540px;
+  margin-bottom:18px;
+}
+
+.animated-line{
+  position:relative;
+  z-index:2;
+  display:inline-block;
+  font-size:29px;
+  font-weight:800;
+  letter-spacing:.2px;
+  color:rgba(255,255,255,.22);
+}
+
+.animated-line span{
+  position:absolute;
+  inset:0;
+  color:transparent;
+  background:linear-gradient(90deg, #ffffff 0%, #d8d1ff 30%, #9fdbff 50%, #ffffff 70%, #d4c8ff 100%);
+  background-size:250% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  filter:drop-shadow(0 0 16px rgba(170,180,255,.65));
+  animation:textShine 4.5s ease-in-out infinite;
+}
+
+.animated-line::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-7px;
+  width:100%;
+  height:2px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent);
+  transform-origin:left;
+  animation:textScan 4.5s ease-in-out infinite;
+}
+
+.left-sub{
+  position:relative;
+  z-index:2;
+  margin-top:28px;
+  max-width:470px;
+  font-size:14px;
+  color:rgba(255,255,255,.88);
+  line-height:1.7;
+}
+
+/* Right panel - matched to bubble background */
+.right-panel{
+  background:linear-gradient(165deg, rgba(17,23,56,.95), rgba(26,34,82,.92));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 28px;
+  border-left:1px solid rgba(167,184,255,.18);
+}
+
+.login-card{
+  width:100%;
+  max-width:360px;
+}
+
+.login-card h2{
+  color:#eef2ff;
+  font-size:30px;
+  margin-bottom:8px;
+  font-weight:700;
+}
+
+.login-card p{
+  color:#b8c5ff;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+/* Error for dark panel */
+.error-msg{
+  color:#ffd8d6;
+  background:rgba(217,48,37,.18);
+  border:1px solid rgba(255,129,120,.45);
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:14px;
+  font-size:13px;
+  text-align:center;
+}
+
+/* Inputs for dark panel */
+.input-box{
+  width:100%;
+  border:1px solid rgba(168,188,255,.34);
+  background:rgba(255,255,255,.07);
+  color:#eef2ff;
+  border-radius:12px;
+  padding:13px 14px;
+  margin-bottom:14px;
+  font-size:14px;
+  outline:none;
+  transition:border-color .25s ease, box-shadow .25s ease, transform .2s ease, background .2s ease;
+}
+.input-box::placeholder{
+  color:#c4d0ff;
+}
+.input-box:focus{
+  border-color:#93b4ff;
+  box-shadow:0 0 0 4px rgba(120,160,255,.18);
+  background:rgba(255,255,255,.10);
+  transform:translateY(-1px);
+}
+
+.login-btn{
+  width:100%;
+  border:none;
+  border-radius:12px;
+  padding:13px;
+  font-size:15px;
+  font-weight:700;
+  color:#ffffff;
+  background:linear-gradient(120deg, var(--btn1), var(--btn2));
+  cursor:pointer;
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.login-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(88,120,255,.42);
+  filter:brightness(1.06);
+}
+.login-btn:active{
+  transform:translateY(1px);
+}
+
+.footer{
+  margin-top:16px;
+  font-size:12px;
+  color:#aebcff;
+  text-align:center;
+}
+
+/* Keyframes */
+@keyframes panelFlow{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+@keyframes blobMove{
+  from{transform:translate(0,0) scale(1)}
+  to{transform:translate(22px,-18px) scale(1.08)}
+}
+@keyframes textShine{
+  0%{background-position:220% 0}
+  100%{background-position:-40% 0}
+}
+@keyframes textScan{
+  0%,100%{transform:scaleX(.25); opacity:.25;}
+  50%{transform:scaleX(1); opacity:1;}
+}
+@keyframes bgPulse{
+  from{filter:saturate(.95) brightness(.9);}
+  to{filter:saturate(1.08) brightness(1);}
+}
+@keyframes waveFloatA{
+  0%,100%{transform:translateX(0) translateY(0);}
+  50%{transform:translateX(7%) translateY(-10px);}
+}
+@keyframes waveFloatB{
+  0%,100%{transform:translateX(0) translateY(0);}
+  50%{transform:translateX(-6%) translateY(12px);}
+}
+@keyframes waveFloatC{
+  0%,100%{transform:translateX(0) translateY(0);}
+  50%{transform:translateX(5%) translateY(-8px);}
+}
+@keyframes streamMove{
+  0%{transform:translateX(-20%) rotate(-7deg); opacity:.08;}
+  50%{opacity:.75;}
+  100%{transform:translateX(20%) rotate(-7deg); opacity:.08;}
+}
+@keyframes bubbleRise{
+  0%{
+    transform:translateY(0) translateX(0) scale(1);
+    opacity:0;
+  }
+  10%{opacity:.8;}
+  85%{opacity:.55;}
+  100%{
+    transform:translateY(-118vh) translateX(var(--drift)) scale(1.12);
+    opacity:0;
+  }
+}
+
+@media (max-width:980px){
+  .auth-shell{
+    grid-template-columns:1fr;
+    min-height:auto;
+  }
+  .left-panel{ padding:44px 30px 34px; }
+  .main-title{ font-size:34px; }
+  .animated-line{ font-size:22px; }
+  .animated-line::after{ display:none; }
+}
+/* ===== ADDED SECURITY UI ===== */
+.password-wrapper{
+  position:relative;
+}
+.toggle-eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#c4d0ff;
+  font-size:14px;
+}
+.pass-error{
+  color:red;
+  font-size:12px;
+  margin-bottom:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- ===== BACKGROUND SAME ===== -->
+<div class="pro-bg">
+  <div class="flow-wave wave-a"></div>
+  <div class="flow-wave wave-b"></div>
+  <div class="flow-wave wave-c"></div>
+
+  <div class="glow-stream stream-1"></div>
+  <div class="glow-stream stream-2"></div>
+  <div class="glow-stream stream-3"></div>
+
+  <div class="bubble-field">
+    <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span>
+    <span class="b5"></span><span class="b6"></span><span class="b7"></span><span class="b8"></span>
+    <span class="b9"></span><span class="b10"></span><span class="b11"></span><span class="b12"></span>
+    <span class="b13"></span><span class="b14"></span>
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="auth-shell">
+
+  <div class="left-panel">
+    <div class="brand">SV COLLEGE PORTAL</div>
+    <h1 class="main-title">Secure Admin Access</h1>
+
+    <div class="animated-line">
+      Student Data Base of SV College
+      <span>Student Data Base of SV College</span>
+    </div>
+
+    <p class="left-sub">
+      Centralized student records, verified access, and institutional data management
+      in one professional and secure platform.
+    </p>
+  </div>
+
+  <div class="right-panel">
+    <div class="login-card">
+
+      <h2>Admin Login</h2>
+      <p>Enter your credentials to continue.</p>
+
+      <!-- 🔥 ERROR MESSAGE (Spring Boot way) -->
+      
+
+      <!-- 🔥 FORM CHANGE -->
+      <form action="/login" method="post">
+
+        <input class="input-box" type="text" name="username" placeholder="Enter Username" required>
+
+        <div class="password-wrapper">
+          <input class="input-box" type="password" id="password" name="password" placeholder="Enter Password" required>
+          <span class="toggle-eye" onclick="togglePassword()">👁</span>
+        </div>
+
+        <div id="passError" class="pass-error"></div>
+
+        <button class="login-btn" type="submit">Login</button>
+      </form>
+
+      <div class="footer">Student Management System</div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== JS SAME ===== -->
+<script>
+function togglePassword(){
+  let pass = document.getElementById("password");
+  pass.type = (pass.type === "password") ? "text" : "password";
+}
+
+function validateForm(){
+  let pass = document.getElementById("password").value;
+  let error = document.getElementById("passError");
+
+  let regex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).{6,}$/;
+
+  if(!regex.test(pass)){
+    error.innerText = "Password must contain uppercase, number & symbol";
+    return false;
+  }
+
+  error.innerText = "";
+  return true;
+}
+</script>
+
+</body>
+</html>
