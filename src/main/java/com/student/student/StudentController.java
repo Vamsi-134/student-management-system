@@ -109,4 +109,37 @@ public class StudentController {
 
         return "viewStudents";
     }
+    @GetMapping("/ranking")
+    public String ranking(org.springframework.ui.Model model) {
+
+        List<Student> list = new ArrayList<>();
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            // 🔥 IMPORTANT (sorting for ranking)
+            String sql = "SELECT * FROM student ORDER BY marks DESC";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
+
+                list.add(s);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("students", list);
+
+        return "ranking"; // HTML file name
+    }
 }
