@@ -208,7 +208,7 @@ public class StudentController {
     public String updateStudent(
             @RequestParam int id,
             @RequestParam double marks,
-            org.springframework.ui.Model model) {
+            Model model) {
 
         try {
             Connection con = dataSource.getConnection();
@@ -221,17 +221,12 @@ public class StudentController {
 
             int result = ps.executeUpdate();
 
-            if (result > 0) {
-                model.addAttribute("success", "Marks updated successfully!");
-            } else {
-                model.addAttribute("error", "Update failed");
-            }
+            System.out.println("Updated rows: " + result);
 
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("error", "Something went wrong");
         }
 
-        return "updateStudent";
+        return "redirect:/manageStudents";
     }
 }
