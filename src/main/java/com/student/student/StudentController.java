@@ -6,9 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class StudentController {
@@ -74,6 +79,34 @@ public class StudentController {
     }
     @GetMapping("/viewStudents")
     public String viewStudents(org.springframework.ui.Model model) {
+
+        List<Student> list = new ArrayList<>();
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            String sql = "SELECT * FROM student";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
+
+                list.add(s);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("students", list);
+
         return "viewStudents";
     }
 }
