@@ -114,7 +114,7 @@ window.onload=function(){showPage(1);}
 
 <tr th:each="s : ${students}">
 <td th:text="${s.id}"></td>
-<td class="name" th:text="${s.name}"></td>
+<td th:utext="${#strings.replace(s.name, keyword, '<span style=\'color:yellow;font-weight:bold\'>' + keyword + '</span>')}"></td>
 <td th:text="${s.age}"></td>
 <td th:text="${s.course}"></td>
 <td th:text="${s.marks}"></td>

@@ -258,7 +258,6 @@ public class StudentController {
 
             String sql = "SELECT * FROM student WHERE name LIKE ?";
             PreparedStatement ps = con.prepareStatement(sql);
-
             ps.setString(1, "%" + keyword + "%");
 
             ResultSet rs = ps.executeQuery();
@@ -279,6 +278,7 @@ public class StudentController {
         }
 
         model.addAttribute("students", list);
+        model.addAttribute("keyword", keyword); // 🔥 important
 
         return "viewStudents";
     }
