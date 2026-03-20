@@ -12,7 +12,7 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             con = DriverManager.getConnection(
-                "jdbc:mysql://hopper.proxy.rlwy.net:30375/railway?useSSL=false&allowPublicKeyRetrieval=true",
+                "jdbc:mysql://hopper.proxy.rlwy.net:30375/railway?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC",
                 "root",
                 "fNOhtFhxDVQDINvjMuyDRJHmynyNAkvl"
             );
