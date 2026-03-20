@@ -58,7 +58,7 @@ public class StudentController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("error", "ERROR: " + e.getMessage());
+            model.addAttribute("error", "Something went wrong");
         } finally {
             // 🔥 Step 4: Close resources
             try {
