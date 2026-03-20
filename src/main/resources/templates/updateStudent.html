@@ -62,11 +62,9 @@ box-shadow:0 8px 20px rgba(99,102,241,.4);
 
 <form th:action="@{/updateStudent}" method="post">
 
-    <!-- ID hidden -->
     <input type="hidden" name="id" th:value="${student.id}">
 
-    <!-- Marks input -->
-    <input type="number" name="marks" placeholder="Enter marks" required>
+    <input type="number" name="marks" th:value="${student.marks}" required>
 
     <button type="submit">Update</button>
 
