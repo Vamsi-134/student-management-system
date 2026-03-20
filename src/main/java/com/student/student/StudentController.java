@@ -204,4 +204,34 @@ public class StudentController {
 
         return "updateStudent";
     }
+    @PostMapping("/updateStudent")
+    public String updateStudent(
+            @RequestParam int id,
+            @RequestParam double marks,
+            org.springframework.ui.Model model) {
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            String sql = "UPDATE student SET marks=? WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setDouble(1, marks);
+            ps.setInt(2, id);
+
+            int result = ps.executeUpdate();
+
+            if (result > 0) {
+                model.addAttribute("success", "Marks updated successfully!");
+            } else {
+                model.addAttribute("error", "Update failed");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Something went wrong");
+        }
+
+        return "updateStudent";
+    }
 }
