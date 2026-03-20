@@ -296,7 +296,7 @@ onclick="return confirm('Are you sure to logout?');">
 
 <!-- SEARCH -->
 <div class="search-bar">
-<form action="/search" method="get" style="display:flex; gap:10px; width:100%;">
+<form th:action="@{/searchStudents}" method="get" style="display:flex; gap:10px; width:100%;">
 <input type="text" name="keyword" placeholder="Search student..." required style="flex:1;">
 <button type="submit">Search 🔍</button>
 </form>
