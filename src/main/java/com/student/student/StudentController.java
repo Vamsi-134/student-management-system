@@ -49,7 +49,7 @@ public class StudentController {
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        model.addAttribute("error", "Something went wrong");
+	        model.addAttribute("error", e.getMessage());
 	    }
 
 	    return "addStudent"; // 🔥 stay on same page
