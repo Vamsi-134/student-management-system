@@ -14,7 +14,7 @@ public class LoginController {
 
         System.out.println("LOGIN HIT 🔥");
 
-        if(username.equals("admin") && password.equals("admin123")) {
+        if(username.equals("Vamsi") && password.equals("Vamsi@3265")) {
             return "dashboard";
         } else {
             model.addAttribute("errorMessage", "Invalid Username or Password");
