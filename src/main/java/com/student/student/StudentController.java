@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,269 +18,268 @@ import java.util.List;
 @Controller
 public class StudentController {
 
-@Autowired  
-private DataSource dataSource;  
-
-@PostMapping("/addStudent")  
-public String addStudent(  
-        @RequestParam int id,  
-        @RequestParam String name,  
-        @RequestParam int age,  
-        @RequestParam String course,  
-        @RequestParam double marks,  
-        org.springframework.ui.Model model) {  
-
-    Connection con = null;  
-    PreparedStatement ps = null;  
-
-    try {  
-        // 🔥 Step 1: Get connection  
-        con = dataSource.getConnection();  
-
-        // ✅ Safety check  
-        if (con == null) {  
-            model.addAttribute("error", "Database connection failed");  
-            return "addStudent";  
-        }  
-
-        // 🔥 Step 2: SQL  
-        String sql = "INSERT INTO student(id,name,age,course,marks) VALUES(?,?,?,?,?)";  
-        ps = con.prepareStatement(sql);  
-
-        ps.setInt(1, id);  
-        ps.setString(2, name);  
-        ps.setInt(3, age);  
-        ps.setString(4, course);  
-        ps.setDouble(5, marks);  
-
-        int result = ps.executeUpdate();  
-
-        // 🔥 Step 3: Result  
-        if (result > 0) {  
-            model.addAttribute("success", "Student added successfully!");  
-        } else {  
-            model.addAttribute("error", "Insert failed");  
-        }  
-
-    } catch (Exception e) {  
-        e.printStackTrace();  
-        model.addAttribute("error", "Something went wrong");  
-    } finally {  
-        // 🔥 Step 4: Close resources  
-        try {  
-            if (ps != null) ps.close();  
-            if (con != null) con.close();  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-    }  
-
-    return "addStudent";  
-}  
-@GetMapping("/viewStudents")  
-public String viewStudents(org.springframework.ui.Model model) {  
-
-    List<Student> list = new ArrayList<>();  
-
-    try {  
-        Connection con = dataSource.getConnection();  
-
-        String sql = "SELECT * FROM student";  
-        PreparedStatement ps = con.prepareStatement(sql);  
-
-        ResultSet rs = ps.executeQuery();  
-
-        while (rs.next()) {  
-            Student s = new Student();  
-            s.setId(rs.getInt("id"));  
-            s.setName(rs.getString("name"));  
-            s.setAge(rs.getInt("age"));  
-            s.setCourse(rs.getString("course"));  
-            s.setMarks(rs.getDouble("marks"));  
-
-            list.add(s);  
-        }  
-
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
-
-    model.addAttribute("students", list);  
-
-    return "viewStudents";  
-}  
-@GetMapping("/ranking")  
-public String ranking(org.springframework.ui.Model model) {  
-
-    List<Student> list = new ArrayList<>();  
-
-    try {  
-        Connection con = dataSource.getConnection();  
-
-        // 🔥 IMPORTANT (sorting for ranking)  
-        String sql = "SELECT * FROM student ORDER BY marks DESC";  
-        PreparedStatement ps = con.prepareStatement(sql);  
+    @Autowired
+    private DataSource dataSource;
+
+    @PostMapping("/addStudent")
+    public String addStudent(
+            @RequestParam int id,
+            @RequestParam String name,
+            @RequestParam int age,
+            @RequestParam String course,
+            @RequestParam double marks,
+            org.springframework.ui.Model model) {
+
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            // 🔥 Step 1: Get connection
+            con = dataSource.getConnection();
+
+            // ✅ Safety check
+            if (con == null) {
+                model.addAttribute("error", "Database connection failed");
+                return "addStudent";
+            }
+
+            // 🔥 Step 2: SQL
+            String sql = "INSERT INTO student(id,name,age,course,marks) VALUES(?,?,?,?,?)";
+            ps = con.prepareStatement(sql);
+
+            ps.setInt(1, id);
+            ps.setString(2, name);
+            ps.setInt(3, age);
+            ps.setString(4, course);
+            ps.setDouble(5, marks);
+
+            int result = ps.executeUpdate();
+
+            // 🔥 Step 3: Result
+            if (result > 0) {
+                model.addAttribute("success", "Student added successfully!");
+            } else {
+                model.addAttribute("error", "Insert failed");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Something went wrong");
+        } finally {
+            // 🔥 Step 4: Close resources
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "addStudent";
+    }
+    @GetMapping("/viewStudents")
+    public String viewStudents(org.springframework.ui.Model model) {
+
+        List<Student> list = new ArrayList<>();
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            String sql = "SELECT * FROM student";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
+
+                list.add(s);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("students", list);
+
+        return "viewStudents";
+    }
+    @GetMapping("/ranking")
+    public String ranking(org.springframework.ui.Model model) {
+
+        List<Student> list = new ArrayList<>();
+
+        try {
+            Connection con = dataSource.getConnection();
+
+            // 🔥 IMPORTANT (sorting for ranking)
+            String sql = "SELECT * FROM student ORDER BY marks DESC";
+            PreparedStatement ps = con.prepareStatement(sql);
 
-        ResultSet rs = ps.executeQuery();  
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {  
-            Student s = new Student();  
-            s.setId(rs.getInt("id"));  
-            s.setName(rs.getString("name"));  
-            s.setAge(rs.getInt("age"));  
-            s.setCourse(rs.getString("course"));  
-            s.setMarks(rs.getDouble("marks"));  
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
 
-            list.add(s);  
-        }  
+                list.add(s);
+            }
 
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    model.addAttribute("students", list);  
+        model.addAttribute("students", list);
 
-    return "ranking"; // HTML file name  
-}  
-@GetMapping("/manageStudents")  
-public String manageStudents(org.springframework.ui.Model model) {  
+        return "ranking"; // HTML file name
+    }
+    @GetMapping("/manageStudents")
+    public String manageStudents(org.springframework.ui.Model model) {
 
-    List<Student> list = new ArrayList<>();  
+        List<Student> list = new ArrayList<>();
 
-    try {  
-        Connection con = dataSource.getConnection();  
+        try {
+            Connection con = dataSource.getConnection();
 
-        String sql = "SELECT * FROM student";  
-        PreparedStatement ps = con.prepareStatement(sql);  
+            String sql = "SELECT * FROM student";
+            PreparedStatement ps = con.prepareStatement(sql);
 
-        ResultSet rs = ps.executeQuery();  
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {  
-            Student s = new Student();  
-            s.setId(rs.getInt("id"));  
-            s.setName(rs.getString("name"));  
-            s.setAge(rs.getInt("age"));  
-            s.setCourse(rs.getString("course"));  
-            s.setMarks(rs.getDouble("marks"));  
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
 
-            list.add(s);  
-        }  
+                list.add(s);
+            }
 
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    model.addAttribute("students", list);  
+        model.addAttribute("students", list);
 
-    return "manageStudents"; // HTML file name  
-}  
-@GetMapping("/editStudent")  
-public String editStudent(@RequestParam int id, Model model) {  
+        return "manageStudents"; // HTML file name
+    }
+    @GetMapping("/editStudent")
+    public String editStudent(@RequestParam int id, Model model) {
 
-    Student s = new Student();  
+        Student s = new Student();
 
-    try {  
-        Connection con = dataSource.getConnection();  
+        try {
+            Connection con = dataSource.getConnection();
 
-        String sql = "SELECT * FROM student WHERE id=?";  
-        PreparedStatement ps = con.prepareStatement(sql);  
-        ps.setInt(1, id);  
+            String sql = "SELECT * FROM student WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
 
-        ResultSet rs = ps.executeQuery();  
+            ResultSet rs = ps.executeQuery();
 
-        if (rs.next()) {  
-            s.setId(rs.getInt("id"));  
-            s.setName(rs.getString("name"));  
-            s.setAge(rs.getInt("age"));  
-            s.setCourse(rs.getString("course"));  
-            s.setMarks(rs.getDouble("marks"));  
-        }  
+            if (rs.next()) {
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
+            }
 
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    model.addAttribute("student", s);  
+        model.addAttribute("student", s);
 
-    return "updateStudent";  
-}  
-@PostMapping("/updateStudent")  
-public String updateStudent(  
-        @RequestParam int id,  
-        @RequestParam double marks,  
-        Model model) {  
+        return "updateStudent";
+    }
+    @PostMapping("/updateStudent")
+    public String updateStudent(
+            @RequestParam int id,
+            @RequestParam double marks,
+            Model model) {
 
-    try {  
-        Connection con = dataSource.getConnection();  
+        try {
+            Connection con = dataSource.getConnection();
 
-        String sql = "UPDATE student SET marks=? WHERE id=?";  
-        PreparedStatement ps = con.prepareStatement(sql);  
+            String sql = "UPDATE student SET marks=? WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
 
-        ps.setDouble(1, marks);  
-        ps.setInt(2, id);  
+            ps.setDouble(1, marks);
+            ps.setInt(2, id);
 
-        int result = ps.executeUpdate();  
+            int result = ps.executeUpdate();
 
-        System.out.println("Updated rows: " + result);  
+            System.out.println("Updated rows: " + result);
 
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    return "redirect:/manageStudents";  
-}  
-@GetMapping("/deleteStudent")  
-public String deleteStudent(@RequestParam int id) {  
+        return "redirect:/manageStudents";
+    }
+    @GetMapping("/deleteStudent")
+    public String deleteStudent(@RequestParam int id) {
 
-    try {  
-        Connection con = dataSource.getConnection();  
+        try {
+            Connection con = dataSource.getConnection();
 
-        String sql = "DELETE FROM student WHERE id=?";  
-        PreparedStatement ps = con.prepareStatement(sql);  
+            String sql = "DELETE FROM student WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(sql);
 
-        ps.setInt(1, id);  
+            ps.setInt(1, id);
 
-        ps.executeUpdate();  
+            ps.executeUpdate();
 
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    return "redirect:/manageStudents";  
-}  
-@GetMapping("/searchStudents")  
-public String searchStudents(@RequestParam String keyword, Model model) {  
+        return "redirect:/manageStudents";
+    }
+    @GetMapping("/searchStudents")
+    public String searchStudents(@RequestParam String keyword, Model model) {
 
-    List<Student> list = new ArrayList<>();  
+        List<Student> list = new ArrayList<>();
 
-    try {  
-        Connection con = dataSource.getConnection();  
+        try {
+            Connection con = dataSource.getConnection();
 
-        String sql = "SELECT * FROM student WHERE name LIKE ?";  
-        PreparedStatement ps = con.prepareStatement(sql);  
-        ps.setString(1, "%" + keyword + "%");  
+            String sql = "SELECT * FROM student WHERE name LIKE ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, "%" + keyword + "%");
 
-        ResultSet rs = ps.executeQuery();  
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {  
-            Student s = new Student();  
-            s.setId(rs.getInt("id"));  
-            s.setName(rs.getString("name"));  
-            s.setAge(rs.getInt("age"));  
-            s.setCourse(rs.getString("course"));  
-            s.setMarks(rs.getDouble("marks"));  
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setAge(rs.getInt("age"));
+                s.setCourse(rs.getString("course"));
+                s.setMarks(rs.getDouble("marks"));
 
-            list.add(s);  
-        }  
+                list.add(s);
+            }
 
-    } catch (Exception e) {  
-        e.printStackTrace();  
-    }  
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-    model.addAttribute("students", list);  
-    model.addAttribute("keyword", keyword); // 🔥 important  
+        model.addAttribute("students", list);
+        model.addAttribute("keyword", keyword); // 🔥 important
 
-    return "viewStudents";  
-}
-
+        return "viewStudents";
+    }
 }
