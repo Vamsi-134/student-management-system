@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Result</title>
+
+<style>
+body{
+background:#0f1117;
+color:white;
+font-family:Poppins;
+padding:40px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:#1c1f2b;
+padding:30px;
+border-radius:15px;
+}
+
+h2{text-align:center;margin-bottom:20px;}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:10px;
+text-align:center;
+border-bottom:1px solid #333;
+}
+
+th{background:#2b2f3d;}
+
+.summary{
+margin-top:20px;
+text-align:center;
+font-size:18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Result Sheet</h2>
+
+<p><b>Reg No:</b> <span th:text="${regNo}"></span></p>
+<p><b>Name:</b> <span th:text="${name}"></span></p>
+<p><b>Program:</b> <span th:text="${program}"></span></p>
+<p><b>Semester:</b> <span th:text="${semester}"></span></p>
+
+<table>
+<tr>
+<th>Subject</th>
+<th>Points</th>
+</tr>
+
+<tr><td>Maths</td><td th:text="${p0}"></td></tr>
+<tr><td>RDBMS</td><td th:text="${p1}"></td></tr>
+<tr><td>DSA</td><td th:text="${p2}"></td></tr>
+<tr><td>JAVA</td><td th:text="${p3}"></td></tr>
+<tr><td>OS</td><td th:text="${p4}"></td></tr>
+<tr><td>Lab</td><td th:text="${p5}"></td></tr>
+<tr><td>Web</td><td th:text="${p6}"></td></tr>
+
+</table>
+
+<div class="summary">
+<b>CGPA:</b> <span th:text="${cgpa}"></span>
+</div>
+
+</div>
+
+</body>
+</html>

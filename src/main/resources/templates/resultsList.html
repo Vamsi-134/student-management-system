@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Results</title>
+<style>
+body{background:#0f1117;color:white;font-family:Poppins;text-align:center;}
+table{margin:auto;width:60%;background:#1c1f2b;border-collapse:collapse;}
+th,td{padding:12px;}
+th{background:#2b2f3d;}
+.btn{padding:6px 12px;background:#4facfe;border:none;color:white;}
+</style>
+</head>
+
+<body>
+
+<h2>Students</h2>
+
+<table>
+<tr>
+<th>Reg No</th>
+<th>Name</th>
+<th>Action</th>
+</tr>
+
+<tr th:each="s : ${students}">
+<td th:text="${s.regNo}"></td>
+<td th:text="${s.name}"></td>
+<td>
+<a th:href="@{/results(id=${s.regNo}, sem=${s.semester})}">
+<button class="btn">View</button>
+</a>
+</td>
+</tr>
+
+</table>
+
+</body>
+</html>

@@ -54,7 +54,7 @@ tr:hover{background:#252a3d;}
 <tr>
 <th>ID</th>
 <th>Name</th>
-<th>Marks</th>
+<th>Course</th>
 <th>Action</th>
 </tr>
 
@@ -62,14 +62,9 @@ tr:hover{background:#252a3d;}
 <tr th:each="s : ${students}">
 <td th:text="${s.id}"></td>
 <td th:text="${s.name}"></td>
-<td th:text="${s.marks}"></td>
+<td th:text="${s.course}"></td>
 
 <td>
-<a class="btn update"
-   th:href="@{'/editStudent?id=' + ${s.id}}">
-Update
-</a>
-
 <a class="btn delete"
    th:href="@{'/deleteStudent?id=' + ${s.id}}"
    onclick="return confirm('Delete this student?');">

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Result</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Result</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+/* CARD */
+.card{
+    width:900px;
+    padding:35px;
+    border-radius:20px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
+    box-shadow:0 15px 50px rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:25px;
+    letter-spacing:1px;
+    font-weight:600;
+}
+
+/* INFO GRID */
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px 40px;
+    margin-bottom:25px;
+}
+
+.info-grid div{
+    display:flex;
+    justify-content:space-between;
+    background:rgba(255,255,255,0.05);
+    padding:12px 18px;
+    border-radius:10px;
+}
+
+.label{
+    color:#94a3b8;
+}
+
+/* TABLE IMPROVEMENT */
+table{
+    width:100%;
+    border-collapse:separate;       /* IMPORTANT */
+    border-spacing:0 12px;          /* ROW GAP */
+}
+
+th{
+    text-align:center;
+    background:linear-gradient(90deg,#4f46e5,#6366f1);
+    font-weight:600;
+    padding:14px;
+    border-radius:8px;
+}
+
+td{
+    text-align:center;
+    padding:16px 12px;
+}
+
+/* SUBJECT COLUMN */
+td:first-child{
+    text-align:left;
+    padding-left:25px;
+    font-weight:500;
+    line-height:1.6;
+    letter-spacing:0.5px;  /* FIXED */
+}
+
+/* ROW STYLE */
+tr{
+    background:rgba(255,255,255,0.03);
+    border-radius:10px;
+    transition:0.3s;
+}
+
+/* HOVER */
+tr:hover{
+    background:rgba(79,70,229,0.15);
+    transform:scale(1.01);
+}
+
+/* CGPA */
+.cgpa{
+    text-align:center;
+    margin-top:25px;
+    font-size:22px;
+    font-weight:600;
+    color:#00e5ff;
+    text-shadow:0 0 10px #00e5ff;
+}
+.pdf-btn{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(135deg,#3b82f6,#2563eb);
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    margin-left:10px;
+}
+@media print {
+
+    body {
+        background: white !important;
+        color: black !important;
+        margin:0;
+        padding:0;
+    }
+
+    .container {
+        width:100% !important;
+        border:none !important;
+        box-shadow:none !important;
+    }
+
+    .header h1 {
+        color:#8B0000 !important;
+    }
+
+    table {
+        width:100%;
+        border-collapse:collapse;
+        font-size:12px;
+    }
+
+    th {
+        background:#002147 !important;
+        color:white !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    td, th {
+        border:1px solid black !important;
+    }
+
+    h3 {
+        color:black !important;
+    }
+
+}
+</style>
+<script>
+function downloadPDF(){
+    window.print(); // browser PDF option
+}
+</script>
+</head>
+
+<body>
+
+<div class="card">
+
+<h3 style="text-align:center;margin-bottom:10px;color:#94a3b8;">
+Academic Performance
+</h3>
+
+<h2>Result Sheet</h2>
+
+<div th:if="${error}" style="color:red;text-align:center;">
+    <span th:text="${error}"></span>
+</div>
+
+<div th:if="${result}">
+
+<div class="info-grid">
+    <div><span class="label">Reg No</span><span th:text="${result.regNo}"></span></div>
+    <div><span class="label">Name</span><span th:text="${result.name}"></span></div>
+    <div><span class="label">Program</span><span th:text="${result.program}"></span></div>
+    <div><span class="label">Semester</span><span th:text="${result.semester}"></span></div>
+</div>
+
+<table>
+<tr>
+<th>Subject Code & Name</th>
+<th>Credits</th>
+<th>Points</th>
+<th>Grade</th>
+</tr>
+
+<tr>
+<td>25MDMATTC01 - Computational Mathematics</td>
+<td>3</td>
+<td th:text="${result.sub0}"></td>
+<td th:text="${g0}"></td>
+</tr>
+
+<tr>
+<td>25MDMCAEC01 - RDBMS</td>
+<td>4</td>
+<td th:text="${result.sub1}"></td>
+<td th:text="${g1}"></td>
+</tr>
+
+<tr>
+<td>25MDMCAEC02 - DSA</td>
+<td>4</td>
+<td th:text="${result.sub2}"></td>
+<td th:text="${g2}"></td>
+</tr>
+
+<tr>
+<td>25MDMCAEC03 - JAVA</td>
+<td>4</td>
+<td th:text="${result.sub3}"></td>
+<td th:text="${g3}"></td>
+</tr>
+
+<tr>
+<td>25MDMCAEC04 - OS</td>
+<td>4</td>
+<td th:text="${result.sub4}"></td>
+<td th:text="${g4}"></td>
+</tr>
+
+<tr>
+<td>25MDENGLC01 - Lab</td>
+<td>2</td>
+<td th:text="${result.sub5}"></td>
+<td th:text="${g5}"></td>
+</tr>
+
+<tr>
+<td>25MDMCASC01 - Web</td>
+<td>2</td>
+<td th:text="${result.sub6}"></td>
+<td th:text="${g6}"></td>
+</tr>
+
+</table>
+
+<div class="cgpa">
+🎯 CGPA: <span th:text="${result.cgpa}"></span>
+</div>
+
+<div style="text-align:center;margin-top:20px;">
+    <button onclick="downloadPDF()" class="pdf-btn">
+    📄 Download PDF
+</button>
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Add Student Result</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+
+    display: flex;
+    justify-content: center;
+
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.container {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 600px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    max-height:90vh;
+    overflow-y:auto;
+}
+
+h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* INPUT + SELECT */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 14px;
+}
+
+/* Placeholder */
+input::placeholder {
+    color: #ccc;
+}
+
+/* 🔥 SELECT CUSTOM */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+}
+
+/* 🔥 DARK DROPDOWN */
+select option {
+    background: #203a43;
+    color: #ffffff;
+}
+
+/* 🔥 HIGHLIGHT SECTION */
+.highlight {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    padding: 12px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 15px;
+    box-shadow: 0 0 15px rgba(0,242,254,0.5);
+}
+
+/* SUBJECT INPUT STYLE */
+input[name^="sub"] {
+    font-weight: 500;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Add Student Result</h2>
+
+<form action="/saveResult" method="post">
+
+<input type="text" name="regNo" placeholder="Register Number" required>
+<input type="text" name="name" placeholder="Full Name" required>
+<input type="text" name="fatherName" placeholder="Father Name">
+<input type="text" name="motherName" placeholder="Mother Name">
+
+<select name="semester">
+<option>Ist year I Semester</option>
+<option>Ist year II Semester</option>
+<option>IInd year I Semester</option>
+<option>IInd year II Semester</option>
+</select>
+
+<input type="text" name="program" value="Master of Computer Applications" readonly>
+
+<div class="highlight">Enter Grades</div>
+
+<input type="number" name="sub0" placeholder="25MDMATTCO1 - Computational Mathematics (Points)">
+<input type="number" name="sub1" placeholder="25MDMCAEC01 - RDBMS (Points)">
+<input type="number" name="sub2" placeholder="25MDMCAEC02 - DSA (Points)">
+<input type="number" name="sub3" placeholder="25MDMCAEC03 - JAVA (Points)">
+<input type="number" name="sub4" placeholder="25MDMCAEC04 - OS (Points)">
+<input type="number" name="sub5" placeholder="25MDENGLC01 - Communication Lab (Points)">
+<input type="number" name="sub6" placeholder="25MDMCASC01 - Frontend (Points)">
+<button type="submit">Save Result</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
