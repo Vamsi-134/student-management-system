@@ -15,18 +15,22 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
+        String path = request.getRequestURI();
         HttpSession session = request.getSession(false);
 
-        String path = request.getRequestURI();
+        System.out.println("FILTER HIT: " + path); // 🔥 DEBUG
 
-        // 🔥 Allow these without login
-        if (path.equals("/login") || path.equals("/") || path.contains("css") || path.contains("js")) {
+        // 🔓 allow login + static files
+        if (path.equals("/") || path.equals("/login") ||
+            path.contains("css") || path.contains("js") || path.contains("images")) {
+
             chain.doFilter(req, res);
             return;
         }
 
-        // 🔥 Check login
+        // 🔒 block if not logged in
         if (session == null || session.getAttribute("user") == null) {
+            System.out.println("BLOCKED 🔒");
             response.sendRedirect("/login");
             return;
         }
